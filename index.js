@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+require("./db");
 // Example of middlewware
 // Parses body of requests and responses to JSON
 app.use(express.json());
