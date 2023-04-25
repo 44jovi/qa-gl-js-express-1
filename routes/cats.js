@@ -41,20 +41,20 @@ router.delete("/remove/:id", async (req, res, next) => {
   }
 });
 
-router.patch("/update/:id", (req, res) => {
-  const { id } = req.params;
-  if (id >= cats.length) {
+router.patch("/update/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const catUpdated = await catModel.updateOne({
+      colour: "my colour changed!",
+    });
+    res.status(201).json(catUpdated);
+  } catch (err) {
     return next({
-      msg: "ID out of bounds",
-      // `status` keyword calls Express' default error handler
-      // So it will throw 404 by default without using our own custom error handler
       status: 404,
+      msg: "cat not updated!",
     });
   }
-  const { name } = req.query;
-  const catToUpdate = cats[id];
-  catToUpdate.name = name;
-  res.json(catToUpdate);
 });
 
 module.exports = router;
