@@ -38,8 +38,16 @@ app.delete("/remove/:id", (req, res) => {
   res.json(removed);
 });
 
-app.patch("/update/:id", (req, res) => {
+app.patch("/update/:id", (req, res, next) => {
   const { id } = req.params;
+  if (id >= cats.length) {
+    return next({
+      msg: "ID out of bounds",
+      // `status` keyword calls Express' default error handler
+      // So it will throw 404 by default without using our own custom error handler
+      status: 404,
+    });
+  }
   const { name } = req.query;
   const catToUpdate = cats[id];
   catToUpdate.name = name;
