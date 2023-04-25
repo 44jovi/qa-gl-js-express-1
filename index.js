@@ -16,43 +16,10 @@ const logger = (req, res, next) => {
 // No path - will always run for all requests
 app.use(logger);
 
-const cats = [];
+const catRoutes = require("./routes/cats");
 
-app.get("/getAll", (req, res) => {
-  // Alternative to res.send() but also converts non-objects to JSON
-  res.json(cats);
-});
-
-app.post("/create", (req, res) => {
-  const newCat = req.body;
-  cats.push(newCat);
-  res.status(201).json(cats[cats.length - 1]);
-});
-
-app.delete("/remove/:id", (req, res) => {
-  // Deconstructs request parameters to get id
-  const { id } = req.params;
-  // Delete 1 item from the array at index of the id
-  // Returns array of the deleted item
-  const removed = cats.splice(id, 1);
-  res.json(removed);
-});
-
-app.patch("/update/:id", (req, res, next) => {
-  const { id } = req.params;
-  if (id >= cats.length) {
-    return next({
-      msg: "ID out of bounds",
-      // `status` keyword calls Express' default error handler
-      // So it will throw 404 by default without using our own custom error handler
-      status: 404,
-    });
-  }
-  const { name } = req.query;
-  const catToUpdate = cats[id];
-  catToUpdate.name = name;
-  res.json(catToUpdate);
-});
+// Prefixes request path with `/cats`
+app.use("/cats", catRoutes);
 
 app.get("/hello", (req, res) => {
   res.send("Howdy, world!");
