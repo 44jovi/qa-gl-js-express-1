@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { catModel } = require("../db");
 
 const cats = [];
 
