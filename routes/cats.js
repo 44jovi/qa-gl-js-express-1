@@ -3,14 +3,28 @@ const { catModel } = require("../db");
 
 const cats = [];
 
-router.get("/getAll", (req, res) => {
-  res.json(cats);
+router.get("/getAll", async (req, res, next) => {
+  try {
+    const catsFound = await catModel.find();
+    res.json(catsFound);
+  } catch (err) {
+    return next({
+      status: 404,
+      msg: "error! not found!",
+    });
+  }
 });
 
-router.post("/create", (req, res) => {
-  const newCat = req.body;
-  cats.push(newCat);
-  res.status(201).json(cats[cats.length - 1]);
+router.post("/create", async ({ body }, res, next) => {
+  try {
+    const created = await catModel.create(body);
+    res.status(201).json(created);
+  } catch (err) {
+    return next({
+      status: 500,
+      msg: "oh, dear, nope - try again...",
+    });
+  }
 });
 
 router.delete("/remove/:id", (req, res) => {

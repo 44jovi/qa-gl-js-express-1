@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const uri = "mongodb://127.0.0.1:27017/cats";
 
 mongoose
-  .connect(uri, { useNewUrlParser: true })
+  .connect(uri)
   .then(() => {
     console.log("good connection!");
   })
@@ -18,7 +18,6 @@ const catSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    minlength: 2,
   },
   colour: String,
   evil: Boolean,
