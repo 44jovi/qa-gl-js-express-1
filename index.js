@@ -17,6 +17,15 @@ app.post("/create", (req, res) => {
   res.status(201).json(cats[cats.length - 1]);
 });
 
+app.delete("/remove/:id", (req, res) => {
+  // Deconstructs request parameters to get id
+  const { id } = req.params;
+  // Delete 1 item from the array at index of the id
+  // Returns array of the deleted item
+  const removed = cats.splice(id, 1);
+  res.json(removed);
+});
+
 app.get("/hello", (req, res) => {
   res.send("Howdy, world!");
 });
