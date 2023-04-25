@@ -4,6 +4,17 @@ const app = express();
 // Parses body of requests and responses to JSON
 app.use(express.json());
 
+const logger = (req, res, next) => {
+  console.log("host:", req.host);
+  console.log("method:", req.method);
+  console.log("path:", req.path);
+  // Move to next function being called
+  next();
+};
+
+// No path - will always run for all requests
+app.use(logger);
+
 const cats = [];
 
 app.get("/getAll", (req, res) => {
