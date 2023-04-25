@@ -58,6 +58,13 @@ app.get("/hello", (req, res) => {
   res.send("Howdy, world!");
 });
 
+// Need 4 parameters for error handling
+// So JS knows the first one is the error
+app.use((err, req, res, next) => {
+  res.status(err.status).send(err.msg);
+});
+
+// app.listen() is always last
 const server = app.listen(4494, () => {
   console.log("server started on port", server.address().port);
 });
