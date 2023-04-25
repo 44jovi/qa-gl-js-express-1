@@ -9,7 +9,8 @@ const logger = (req, res, next) => {
   console.log("method:", req.method);
   console.log("path:", req.path);
   // Move to next function being called
-  next();
+  // `return` keyword to stop this function
+  return next();
 };
 
 // No path - will always run for all requests
