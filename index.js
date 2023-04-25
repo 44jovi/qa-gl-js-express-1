@@ -26,6 +26,14 @@ app.delete("/remove/:id", (req, res) => {
   res.json(removed);
 });
 
+app.patch("/update/:id", (req, res) => {
+  const { id } = req.params;
+  const { name } = req.query;
+  const catToUpdate = cats[id];
+  catToUpdate.name = name;
+  res.json(catToUpdate);
+});
+
 app.get("/hello", (req, res) => {
   res.send("Howdy, world!");
 });
