@@ -1,8 +1,6 @@
 const router = require("express").Router();
 const { catModel } = require("../db");
 
-const cats = [];
-
 router.get("/getAll", async (req, res, next) => {
   try {
     const catsFound = await catModel.find();
@@ -27,13 +25,20 @@ router.post("/create", async ({ body }, res, next) => {
   }
 });
 
-router.delete("/remove/:id", (req, res) => {
-  // Deconstructs request parameters to get id
-  const { id } = req.params;
-  // Delete 1 item from the array at index of the id
-  // Returns array of the deleted item
-  const removed = cats.splice(id, 1);
-  res.json(removed);
+router.delete("/remove/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const catRemoved = await catModel.deleteOne({
+      _id: id,
+    });
+    res.status(201).json(catRemoved);
+  } catch (err) {
+    return next({
+      status: 404,
+      msg: "cat not removed!",
+    });
+  }
 });
 
 router.patch("/update/:id", (req, res) => {
