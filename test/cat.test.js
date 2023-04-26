@@ -23,6 +23,7 @@ describe("API tests", () => {
     testCat = JSON.stringify(testCat);
     testCat = JSON.parse(testCat);
   });
+
   it("/create should create a cat", (done) => {
     const cat = { name: "whiskerz", colour: "blue", evil: true };
 
@@ -75,6 +76,27 @@ describe("API tests", () => {
         // `eql` is the same as to.deep.equal:
         chai.expect(res.body).to.eql([]);
         chai.expect(res.status).to.equal(200);
+        done();
+      });
+  });
+
+  it("/update udpates a cat", (done) => {
+    const updatedCat = {
+      name: "potato",
+      colour: "brown",
+      evil: false,
+    };
+
+    chai
+      .request(server)
+      .patch("/cats/update/" + testCat._id)
+      .query(updatedCat)
+      .end((err, res) => {
+        chai.expect(err).to.be.null;
+        chai
+          .expect(res.body)
+          .to.deep.equal({ _id: testCat._id, __v: testCat.__v, ...updatedCat });
+        chai.expect(res.status).to.equal(201);
         done();
       });
   });

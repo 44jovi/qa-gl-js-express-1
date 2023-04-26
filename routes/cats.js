@@ -44,9 +44,9 @@ router.delete("/remove/:id", async (req, res, next) => {
 router.patch("/update/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-
-    const catUpdated = await catModel.updateOne({
-      colour: "my colour changed!",
+    const catUpdated = await catModel.findByIdAndUpdate(id, req.query, {
+      // Use "after" to return document *after* it is updated
+      returnDocument: "after",
     });
     res.status(201).json(catUpdated);
   } catch (err) {
