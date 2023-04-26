@@ -1,35 +1,44 @@
-const chai = require("chai");
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-expressions */
+const chai = require('chai');
+const { describe, beforeEach, it } = require('mocha');
+// const { beforeEach } = require('chai');
+// const { it } = require('chai');
+
 // Chai HTTP plugin
-const chaiHttp = require("chai-http");
+const chaiHttp = require('chai-http');
+
 chai.use(chaiHttp);
 
-const server = require("../index");
-const { catModel } = require("../db");
-
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const server = require('../index');
+const { catModel } = require('../db');
 
 // before(() => {
 //   mongoose.connection.db.dropDatabase();
 // });
 
-describe("API tests", () => {
+describe('API tests', () => {
   beforeEach(async () => {
     await catModel.deleteMany({});
     testCat = await catModel.create({
-      name: "test cat!",
-      colour: "orange",
+      name: 'test cat!',
+      colour: 'orange',
       evil: true,
     });
-    testCat = JSON.stringify(testCat);
-    testCat = JSON.parse(testCat);
+    // testCat = JSON.stringify(testCat);
+    // testCat = JSON.parse(testCat);
+
+    // eslint-disable-next-line no-unused-vars
+    testCat = JSON.parse(JSON.stringify(testCat));
   });
 
-  it("/create should create a cat", (done) => {
-    const cat = { name: "whiskerz", colour: "blue", evil: true };
+  it('/create should create a cat', (done) => {
+    const cat = { name: 'whiskerz', colour: 'blue', evil: true };
 
     chai
       .request(server)
-      .post("/cats/create")
+      .post('/cats/create')
       .send(cat)
       .end((err, res) => {
         chai.expect(err).to.be.null;
@@ -40,25 +49,25 @@ describe("API tests", () => {
       });
   });
 
-  it("/getAll should get all cats", (done) => {
+  it('/getAll should get all cats', (done) => {
     chai
       .request(server)
-      .get("/cats/getAll")
+      .get('/cats/getAll')
       .send()
       .end((err, res) => {
         chai.expect(err).to.be.null;
         chai.expect(res.body[0]._id).to.equal(testCat._id);
         // Confirm it was the last cat created
-        chai.expect(res.body[res.body.length - 1].name).to.equal("test cat!");
+        chai.expect(res.body[res.body.length - 1].name).to.equal('test cat!');
         chai.expect(res.status).to.equal(200);
         done();
       });
   });
 
-  it("/remove deletes a cat", (done) => {
+  it('/remove deletes a cat', (done) => {
     chai
       .request(server)
-      .delete(`/cats/remove/` + testCat._id)
+      .delete(`/cats/remove/${testCat._id}`)
       .send()
       .end((err, res) => {
         chai.expect(err).to.be.null;
@@ -69,7 +78,7 @@ describe("API tests", () => {
 
     chai
       .request(server)
-      .get("/cats/getAll")
+      .get('/cats/getAll')
       .send()
       .end((err, res) => {
         chai.expect(err).to.be.null;
@@ -80,16 +89,16 @@ describe("API tests", () => {
       });
   });
 
-  it("/update udpates a cat", (done) => {
+  it('/update udpates a cat', (done) => {
     const updatedCat = {
-      name: "potato",
-      colour: "brown",
+      name: 'potato',
+      colour: 'brown',
       evil: false,
     };
 
     chai
       .request(server)
-      .patch("/cats/update/" + testCat._id)
+      .patch(`/cats/update/${testCat._id}`)
       .query(updatedCat)
       .end((err, res) => {
         chai.expect(err).to.be.null;
