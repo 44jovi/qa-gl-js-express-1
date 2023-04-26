@@ -2,8 +2,6 @@
 /* eslint-disable no-unused-expressions */
 const chai = require('chai');
 const { describe, beforeEach, it } = require('mocha');
-// const { beforeEach } = require('chai');
-// const { it } = require('chai');
 
 // Chai HTTP plugin
 const chaiHttp = require('chai-http');
@@ -26,8 +24,6 @@ describe('API tests', () => {
       colour: 'orange',
       evil: true,
     });
-    // testCat = JSON.stringify(testCat);
-    // testCat = JSON.parse(testCat);
 
     // eslint-disable-next-line no-unused-vars
     testCat = JSON.parse(JSON.stringify(testCat));
